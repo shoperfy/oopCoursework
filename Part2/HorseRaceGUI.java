@@ -16,6 +16,7 @@ public class HorseRaceGUI extends JFrame {
     private JButton resetButton;
     private JTextArea raceTrackArea;
     private JComboBox<Integer> numLanesComboBox;
+    private JComboBox<Integer> laneLengthComboBox;
     private List<Horse> horses;
     private Race race;
 
@@ -39,6 +40,10 @@ public class HorseRaceGUI extends JFrame {
         Integer[] numLanesOptions = { 1, 2, 3, 4, 5 };
         numLanesComboBox = new JComboBox<>(numLanesOptions);
         inputPanel.add(numLanesComboBox);
+        inputPanel.add(new JLabel("Lane Length:"));
+        Integer[] laneLengthOptions = { 30, 40, 50, 60, 70 };
+        laneLengthComboBox = new JComboBox<>(laneLengthOptions);
+        inputPanel.add(laneLengthComboBox);
         submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -76,7 +81,8 @@ public class HorseRaceGUI extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         horses = new ArrayList<>();
-        race = new Race(50, (Integer) numLanesComboBox.getSelectedItem());
+        int laneLength = (Integer) laneLengthComboBox.getSelectedItem();
+        race = new Race(laneLength, (Integer) numLanesComboBox.getSelectedItem());
 
         pack();
         setLocationRelativeTo(null);
@@ -123,7 +129,8 @@ public class HorseRaceGUI extends JFrame {
     private void resetRace() {
         horses.clear();
         int numLanes = (Integer) numLanesComboBox.getSelectedItem();
-        race = new Race(50, numLanes);
+        int laneLength = (Integer) laneLengthComboBox.getSelectedItem();
+        race = new Race(laneLength, numLanes);
         raceTrackArea.setText("");
     }
 
@@ -131,9 +138,10 @@ public class HorseRaceGUI extends JFrame {
     private void updateRaceTrack() {
         StringBuilder raceTrack = new StringBuilder();
         int numLanes = (Integer) numLanesComboBox.getSelectedItem();
+        int laneLength = (Integer) laneLengthComboBox.getSelectedItem();
         for (int i = 0; i < numLanes; i++) {
             StringBuilder lane = new StringBuilder();
-            for (int j = 0; j < 50; j++) {
+            for (int j = 0; j < laneLength; j++) {
                 boolean horseFound = false;
                 for (Horse horse : horses) {
                     if (race.getHorseLane(horse) == i && horse.getDistanceTravelled() == j) {
