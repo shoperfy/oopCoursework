@@ -15,6 +15,7 @@ public class HorseRaceGUI extends JFrame {
     private JButton startButton;
     private JButton resetButton;
     private JTextArea raceTrackArea;
+    private JComboBox<Integer> numLanesComboBox;
     private List<Horse> horses;
     private Race race;
 
@@ -24,7 +25,7 @@ public class HorseRaceGUI extends JFrame {
         setLayout(new BorderLayout());
 
         // Create the input panel for adding horses
-        JPanel inputPanel = new JPanel(new GridLayout(4, 2));
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2));
         inputPanel.add(new JLabel("Name:"));
         nameField = new JTextField();
         inputPanel.add(nameField);
@@ -34,6 +35,10 @@ public class HorseRaceGUI extends JFrame {
         inputPanel.add(new JLabel("Confidence:"));
         confidenceField = new JTextField();
         inputPanel.add(confidenceField);
+        inputPanel.add(new JLabel("Number of Lanes:"));
+        Integer[] numLanesOptions = { 1, 2, 3, 4, 5 };
+        numLanesComboBox = new JComboBox<>(numLanesOptions);
+        inputPanel.add(numLanesComboBox);
         submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -71,7 +76,7 @@ public class HorseRaceGUI extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         horses = new ArrayList<>();
-        race = new Race(50, 5);
+        race = new Race(50, (Integer) numLanesComboBox.getSelectedItem());
 
         pack();
         setLocationRelativeTo(null);
@@ -117,14 +122,16 @@ public class HorseRaceGUI extends JFrame {
     // Reset the race and clear the race track
     private void resetRace() {
         horses.clear();
-        race = new Race(50, 5);
+        int numLanes = (Integer) numLanesComboBox.getSelectedItem();
+        race = new Race(50, numLanes);
         raceTrackArea.setText("");
     }
 
     // Update the race track display based on the current positions of the horses
     private void updateRaceTrack() {
         StringBuilder raceTrack = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
+        int numLanes = (Integer) numLanesComboBox.getSelectedItem();
+        for (int i = 0; i < numLanes; i++) {
             StringBuilder lane = new StringBuilder();
             for (int j = 0; j < 50; j++) {
                 boolean horseFound = false;
